@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    public class MarketDTO
+    public class MarketByNameDTO
     {
         public int Id { get; set; }
 

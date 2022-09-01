@@ -28,9 +28,37 @@ namespace AOP.WebAPI.Controllers
         {
             try
             {
-                var markets = await this._marketRepository.GetAllMarketsAsync();
+                var markets = await this._marketRepository.GetAllMarketsAsync();               
 
-                return Ok(markets.ToList());
+                var resultsModel = new List<AllMarketsDTO>();
+
+                var countDict = new Dictionary<int, int>();
+
+                foreach (var market in markets)
+                {
+                    var marketDetails = await this._marketRepository.GetMarketWithDetailsAsync(market.Name);
+
+                    var marketSpots = marketDetails.Headquarters
+                        .SelectMany(hq => hq.DistributionServers)
+                        .SelectMany(ds => ds.DistributionServerSpots)
+                        .Select(dss => dss.Spot)
+                        .Distinct()
+                        .ToList();
+
+                    countDict.Add(market.Id, marketSpots.Count);
+
+                    var resultModel = new AllMarketsDTO()
+                    {
+                        Id = market.Id,
+                        Name = market.Name,
+                        LastUpdated = market.LastUpdated,
+                        SpotsInMarketCount = countDict[market.Id]
+                    };
+
+                    resultsModel.Add(resultModel);                  
+                }
+
+                return Ok(resultsModel);
             }
             catch (Exception ex)
             {
@@ -44,7 +72,8 @@ namespace AOP.WebAPI.Controllers
         {
             try
             {
-                var market = await this._marketRepository.GetMarketByNameAsync(name);
+                var market = await this._marketRepository.GetMarketByNameAsync(name);               
+
                 if (market == null)
                 {
                     this._logger.LogError("Market with the name: {0}, could not be found in the database", name);
@@ -53,7 +82,15 @@ namespace AOP.WebAPI.Controllers
                 else
                 {
                     this._logger.LogInformation("Returned market with the name: {0}", name);
-                    return Ok(market);
+
+                    var marketResult = new MarketByNameDTO()
+                    {
+                        Id = market.Id,
+                        Name = market.Name,
+                        LastUpdated = market.LastUpdated,
+                    };
+
+                    return Ok(marketResult);
                 }
             }
             catch (Exception ex)
@@ -69,6 +106,7 @@ namespace AOP.WebAPI.Controllers
             try
             {
                 var market = await this._marketRepository.GetMarketWithDetailsAsync(name);
+
                 if (market == null)
                 {
                     _logger.LogError("Market with the name: {0}, could not be found in the database", name);
@@ -78,7 +116,7 @@ namespace AOP.WebAPI.Controllers
                 {
                     _logger.LogInformation("Returned market with details for name: {0}", name);
 
-                    var marketResult = new MarketDTO()
+                    var marketResult = new MarketDetailsDTO()
                     {
                         Id = market.Id,
                         Name = market.Name,

@@ -25,6 +25,8 @@ namespace AOP.WebAPI
             builder.Services.AddScoped<DbContext, AOPDatabaseContext>();
 
             builder.Services.AddScoped<IMarketRepository, MarketRepository>();
+            builder.Services.AddScoped<IHeadquartersRepository, HeadquartersRepository>();
+            builder.Services.AddScoped<IDistributionServerRepository, DistributionServerRepository>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
