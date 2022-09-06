@@ -7,6 +7,12 @@
     using System.Threading.Tasks;
     public class MarketWithDetailsDTO
     {
+        public MarketWithDetailsDTO()
+        {
+            this.Market = new MarketDTO();
+            this.Headquarters = new List<HeadquartersDTO>();
+        }
+
         public MarketDTO Market { get; set; }
 
         public IList<HeadquartersDTO> Headquarters { get; set; }

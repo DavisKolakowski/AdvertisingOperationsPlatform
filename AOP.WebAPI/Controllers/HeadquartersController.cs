@@ -82,7 +82,7 @@ namespace AOP.WebAPI.Controllers
                 {
                     _logger.LogInformation("Returned headquarters with details for name: {0}", name);
 
-                    var headquartersResult = _mapper.Map<HeadquartersDetailsDTO>(headquarters);
+                    var headquartersResult = _mapper.Map<HeadquartersWithDetailsDTO>(headquarters);
                     return Ok(headquartersResult);
                 }
             }
