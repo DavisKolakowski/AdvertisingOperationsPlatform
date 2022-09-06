@@ -6,16 +6,12 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class HeadquartersDetailsDTO
+    public class DistributionServerHeadquartersDTO
     {
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public IEnumerable<MarketDTO> Markets { get; set; }
-
         public DateTime? LastUpdated { get; set; }
-
-        public IEnumerable<DistributionServerDTO> DistributionServers { get; set; }
     }
 }

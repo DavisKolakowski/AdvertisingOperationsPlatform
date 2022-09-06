@@ -1,7 +1,6 @@
-﻿namespace AOP.WebAPI.Core.Contracts
+﻿namespace AOP.WebAPI.Core.Interfaces
 {
     using AOP.WebAPI.Core.Data.Entities.Models;
-    using AOP.WebAPI.Core.Interfaces;
 
     using System;
     using System.Collections.Generic;

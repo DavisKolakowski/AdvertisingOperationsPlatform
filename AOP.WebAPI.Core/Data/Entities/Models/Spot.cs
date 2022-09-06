@@ -4,6 +4,10 @@ namespace AOP.WebAPI.Core.Data.Entities.Models
 {
     public class Spot
     {
+        public Spot()
+        {
+            DistributionServerSpots = new List<DistributionServerSpot>();
+        }
         public int Id { get; set; }
 
         public string SpotIdentifier { get; set; }
@@ -12,6 +16,6 @@ namespace AOP.WebAPI.Core.Data.Entities.Models
 
         public DateTime? LastUpdated { get; set; }
 
-        public List<DistributionServerSpot> DistributionServerSpots { get; set; } = new List<DistributionServerSpot>();
+        public virtual IList<DistributionServerSpot> DistributionServerSpots { get; set; }
     }
 }

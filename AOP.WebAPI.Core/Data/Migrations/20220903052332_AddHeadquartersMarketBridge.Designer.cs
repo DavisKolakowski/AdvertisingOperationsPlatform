@@ -4,6 +4,7 @@ using AOP.WebAPI.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AOP.WebAPI.Core.Data.Migrations
 {
     [DbContext(typeof(AOPDatabaseContext))]
-    partial class AOPDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220903052332_AddHeadquartersMarketBridge")]
+    partial class AddHeadquartersMarketBridge
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,6 +108,29 @@ namespace AOP.WebAPI.Core.Data.Migrations
                     b.ToTable("Headquarters");
                 });
 
+            modelBuilder.Entity("AOP.WebAPI.Core.Data.Entities.Models.HeadquartersMarket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("HeadquartersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MarketId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HeadquartersId");
+
+                    b.HasIndex("MarketId");
+
+                    b.ToTable("HeadquartersMarket");
+                });
+
             modelBuilder.Entity("AOP.WebAPI.Core.Data.Entities.Models.Market", b =>
                 {
                     b.Property<int>("Id")
@@ -147,21 +172,6 @@ namespace AOP.WebAPI.Core.Data.Migrations
                     b.ToTable("Spots");
                 });
 
-            modelBuilder.Entity("HeadquartersMarket", b =>
-                {
-                    b.Property<int>("HeadquartersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MarketsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("HeadquartersId", "MarketsId");
-
-                    b.HasIndex("MarketsId");
-
-                    b.ToTable("HeadquartersMarket");
-                });
-
             modelBuilder.Entity("AOP.WebAPI.Core.Data.Entities.Models.DistributionServer", b =>
                 {
                     b.HasOne("AOP.WebAPI.Core.Data.Entities.Models.Headquarters", "Headquarters")
@@ -186,19 +196,23 @@ namespace AOP.WebAPI.Core.Data.Migrations
                     b.Navigation("Spot");
                 });
 
-            modelBuilder.Entity("HeadquartersMarket", b =>
+            modelBuilder.Entity("AOP.WebAPI.Core.Data.Entities.Models.HeadquartersMarket", b =>
                 {
-                    b.HasOne("AOP.WebAPI.Core.Data.Entities.Models.Headquarters", null)
-                        .WithMany()
+                    b.HasOne("AOP.WebAPI.Core.Data.Entities.Models.Headquarters", "Headquarters")
+                        .WithMany("HeadquartersMarkets")
                         .HasForeignKey("HeadquartersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AOP.WebAPI.Core.Data.Entities.Models.Market", null)
-                        .WithMany()
-                        .HasForeignKey("MarketsId")
+                    b.HasOne("AOP.WebAPI.Core.Data.Entities.Models.Market", "Market")
+                        .WithMany("HeadquartersMarkets")
+                        .HasForeignKey("MarketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Headquarters");
+
+                    b.Navigation("Market");
                 });
 
             modelBuilder.Entity("AOP.WebAPI.Core.Data.Entities.Models.DistributionServer", b =>
@@ -209,6 +223,13 @@ namespace AOP.WebAPI.Core.Data.Migrations
             modelBuilder.Entity("AOP.WebAPI.Core.Data.Entities.Models.Headquarters", b =>
                 {
                     b.Navigation("DistributionServers");
+
+                    b.Navigation("HeadquartersMarkets");
+                });
+
+            modelBuilder.Entity("AOP.WebAPI.Core.Data.Entities.Models.Market", b =>
+                {
+                    b.Navigation("HeadquartersMarkets");
                 });
 
             modelBuilder.Entity("AOP.WebAPI.Core.Data.Entities.Models.Spot", b =>

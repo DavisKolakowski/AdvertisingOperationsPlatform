@@ -5,8 +5,9 @@ namespace AOP.WebAPI
     using AOP.WebAPI.Core.Interfaces;
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Data.Entities.Models;
-    using AOP.WebAPI.Core.Contracts;
     using AOP.WebAPI.Core.Repositories;
+    using AutoMapper;
+    using AOP.WebAPI.Core.Data.Entities;
 
     public class Program
     {
@@ -27,6 +28,8 @@ namespace AOP.WebAPI
             builder.Services.AddScoped<IMarketRepository, MarketRepository>();
             builder.Services.AddScoped<IHeadquartersRepository, HeadquartersRepository>();
             builder.Services.AddScoped<IDistributionServerRepository, DistributionServerRepository>();
+
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

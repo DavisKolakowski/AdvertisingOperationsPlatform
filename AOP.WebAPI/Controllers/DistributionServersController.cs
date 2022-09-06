@@ -6,8 +6,8 @@ namespace AOP.WebAPI.Controllers
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Interfaces;
     using AOP.WebAPI.Core.Data.Entities.Models;
-    using AOP.WebAPI.Core.Contracts;
     using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
+    using AutoMapper;
 
     [ApiController]
     [Route("[controller]")]
@@ -17,10 +17,13 @@ namespace AOP.WebAPI.Controllers
 
         private IDistributionServerRepository _distributionServerRepository;
 
-        public DistributionServersController(ILogger<DistributionServersController> logger, IDistributionServerRepository distributionServerRepository)
+        private IMapper _mapper;
+
+        public DistributionServersController(ILogger<DistributionServersController> logger, IDistributionServerRepository distributionServerRepository, IMapper mapper)
         {
             this._logger = logger;
             this._distributionServerRepository = distributionServerRepository;
+            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -79,33 +82,7 @@ namespace AOP.WebAPI.Controllers
                 {
                     _logger.LogInformation("Returned distribution server with details for identity: {0}", serverIdentity);
 
-                    var distributionServerResult = new DistributionServerDetailsDTO()
-                    {
-                        Id = distributionServer.Id,
-                        ServerIdentity = distributionServer.ServerIdentity,
-                        LastUpdated = distributionServer.LastUpdated,
-                        ServerFolder = distributionServer.ServerFolder,
-                        SpotsLogFileName = distributionServer.SpotsLogFileName,
-                        SpotsLogLastWriteTime = distributionServer.SpotsLogLastWriteTime,
-                        LastSuccessfulDatabaseJob = distributionServer.LastSuccessfulDatabaseJob,
-                        HeadquartersId = distributionServer.HeadquartersId,
-                        HeadquartersName = distributionServer.Headquarters.Name,
-                        HeadquartersLastUpdated = distributionServer.Headquarters.LastUpdated,
-                        Spots = distributionServer.DistributionServerSpots
-                            .Select(dss =>
-                            new DistributionServerSpotDTO()
-                            {
-                                Id = dss.Id,
-                                FirstAirDate = dss.FirstAirDate,
-                                Spot = new SpotDTO()
-                                {
-                                    Id = dss.Spot.Id,
-                                    SpotIdentifier = dss.Spot.SpotIdentifier,
-                                    Name = dss.Spot.Name,
-                                }
-                            })
-                    };
-
+                    var distributionServerResult = _mapper.Map<DistributionServerDetailsDTO>(distributionServer);
                     return Ok(distributionServerResult);
                 }
             }

@@ -22,12 +22,8 @@
 
         public DateTime? SpotsLogLastWriteTime { get; set; }
 
-        public int? HeadquartersId { get; set; }
+        public DistributionServerHeadquartersDTO Headquarters { get; set; }
 
-        public string HeadquartersName { get; set; } = string.Empty;
-
-        public DateTime? HeadquartersLastUpdated { get; set; }
-
-        public IEnumerable<DistributionServerSpotDTO> Spots { get; set; }
+        public IList<DistributionServerSpotDTO> Spots { get; set; }
     }
 }

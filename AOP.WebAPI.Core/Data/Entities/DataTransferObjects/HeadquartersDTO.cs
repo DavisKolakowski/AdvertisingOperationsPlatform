@@ -14,6 +14,6 @@
 
         public DateTime? LastUpdated { get; set; }
 
-        public IEnumerable<DistributionServerDTO> DistributionServers { get; set; }
+        public List<DistributionServerDTO> DistributionServers { get; set; }
     }
 }

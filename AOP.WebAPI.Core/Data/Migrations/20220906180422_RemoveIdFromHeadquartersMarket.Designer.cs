@@ -4,6 +4,7 @@ using AOP.WebAPI.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AOP.WebAPI.Core.Data.Migrations
 {
     [DbContext(typeof(AOPDatabaseContext))]
-    partial class AOPDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220906180422_RemoveIdFromHeadquartersMarket")]
+    partial class RemoveIdFromHeadquartersMarket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

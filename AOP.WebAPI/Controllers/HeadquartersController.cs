@@ -6,8 +6,8 @@ namespace AOP.WebAPI.Controllers
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Interfaces;
     using AOP.WebAPI.Core.Data.Entities.Models;
-    using AOP.WebAPI.Core.Contracts;
     using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
+    using AutoMapper;
 
     [ApiController]
     [Route("[controller]")]
@@ -17,10 +17,13 @@ namespace AOP.WebAPI.Controllers
 
         private IHeadquartersRepository _headquartersRepository;
 
-        public HeadquartersController(ILogger<HeadquartersController> logger, IHeadquartersRepository headquartersRepository)
+        private IMapper _mapper;
+
+        public HeadquartersController(ILogger<HeadquartersController> logger, IHeadquartersRepository headquartersRepository, IMapper mapper)
         {
             this._logger = logger;
             this._headquartersRepository = headquartersRepository;
+            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -79,44 +82,7 @@ namespace AOP.WebAPI.Controllers
                 {
                     _logger.LogInformation("Returned headquarters with details for name: {0}", name);
 
-                    var headquartersResult = new HeadquartersDetailsDTO()
-                    {
-                        Id = headquarters.Id,
-                        Name = headquarters.Name,
-                        Markets = headquarters.Markets.Select(m => 
-                        new MarketDTO()
-                        {
-                            Id = m.Id,
-                            Name = m.Name,
-                            LastUpdated = m.LastUpdated,
-                        }),
-                        LastUpdated = headquarters.LastUpdated,
-                        DistributionServers = headquarters.DistributionServers.Select(ds =>
-                        new DistributionServerDTO()
-                        {
-                            Id = ds.Id,
-                            ServerIdentity = ds.ServerIdentity,
-                            LastUpdated = ds.LastUpdated,
-                            ServerFolder = ds.ServerFolder,
-                            SpotsLogFileName = ds.SpotsLogFileName,
-                            SpotsLogLastWriteTime = ds.SpotsLogLastWriteTime,
-                            LastSuccessfulDatabaseJob = ds.LastSuccessfulDatabaseJob,
-                            Spots = ds.DistributionServerSpots
-                                .Select(dss =>
-                                new DistributionServerSpotDTO()
-                                {
-                                    Id = dss.Id,
-                                    FirstAirDate = dss.FirstAirDate,
-                                    Spot = new SpotDTO()
-                                    {
-                                        Id = dss.Spot.Id,
-                                        SpotIdentifier = dss.Spot.SpotIdentifier,
-                                        Name = dss.Spot.Name,
-                                    }
-                                })
-                        })
-                    };
-
+                    var headquartersResult = _mapper.Map<HeadquartersDetailsDTO>(headquarters);
                     return Ok(headquartersResult);
                 }
             }

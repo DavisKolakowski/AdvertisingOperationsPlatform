@@ -10,6 +10,8 @@
     {
         public int Id { get; set; }
 
+        public int? HeadquartersId { get; set; }
+
         public string ServerIdentity { get; set; }
 
         public string ServerFolder { get; set; }
@@ -22,6 +24,6 @@
 
         public DateTime? SpotsLogLastWriteTime { get; set; }
 
-        public IEnumerable<DistributionServerSpotDTO> Spots { get; set; }
+        public List<DistributionServerSpotDTO> Spots { get; set; }
     }
 }

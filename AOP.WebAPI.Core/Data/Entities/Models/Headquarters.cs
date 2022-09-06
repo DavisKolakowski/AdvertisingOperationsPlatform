@@ -7,6 +7,7 @@ namespace AOP.WebAPI.Core.Data.Entities.Models
         public Headquarters()
         {
             Markets = new HashSet<Market>();
+            DistributionServers = new HashSet<DistributionServer>();
         }
 
         public int Id { get; set; }
@@ -15,8 +16,8 @@ namespace AOP.WebAPI.Core.Data.Entities.Models
 
         public DateTime? LastUpdated { get; set; }
 
-        public ICollection<DistributionServer> DistributionServers { get; set; }
-
         public virtual ICollection<Market> Markets { get; set; }
+
+        public virtual ICollection<DistributionServer> DistributionServers { get; set; }
     }
 }

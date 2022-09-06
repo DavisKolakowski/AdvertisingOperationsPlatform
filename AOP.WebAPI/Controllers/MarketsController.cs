@@ -6,8 +6,8 @@ namespace AOP.WebAPI.Controllers
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Interfaces;
     using AOP.WebAPI.Core.Data.Entities.Models;
-    using AOP.WebAPI.Core.Contracts;
     using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
+    using AutoMapper;
 
     [ApiController]
     [Route("[controller]")]
@@ -17,10 +17,13 @@ namespace AOP.WebAPI.Controllers
 
         private IMarketRepository _marketRepository;
 
-        public MarketsController(ILogger<MarketsController> logger, IMarketRepository marketRepository)
+        private IMapper _mapper;
+
+        public MarketsController(ILogger<MarketsController> logger, IMarketRepository marketRepository, IMapper mapper)
         {
             this._logger = logger;
             this._marketRepository = marketRepository;
+            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -34,29 +37,29 @@ namespace AOP.WebAPI.Controllers
 
                 var countDict = new Dictionary<int, int>();
 
-                foreach (var market in markets)
-                {
-                    var marketDetails = await this._marketRepository.GetMarketWithDetailsAsync(market.Name);
+                //foreach (var market in markets)
+                //{
+                //    var marketDetails = await this._marketRepository.GetMarketWithDetailsAsync(market.Name);
 
-                    var marketSpots = marketDetails.Headquarters
-                        .SelectMany(hq => hq.DistributionServers)
-                        .SelectMany(ds => ds.DistributionServerSpots)
-                        .Select(dss => dss.Spot)
-                        .Distinct()
-                        .ToList();
+                //    var marketSpots = marketDetails.Headquarters
+                //        .SelectMany(hq => hq.DistributionServers)
+                //        .SelectMany(ds => ds.DistributionServerSpots)
+                //        .Select(dss => dss.Spot)
+                //        .Distinct()
+                //        .ToList();
 
-                    countDict.Add(market.Id, marketSpots.Count);
+                //    countDict.Add(market.Id, marketSpots.Count);
 
-                    var resultModel = new AllMarketsDTO()
-                    {
-                        Id = market.Id,
-                        Name = market.Name,
-                        LastUpdated = market.LastUpdated,
-                        SpotsInMarketCount = countDict[market.Id]
-                    };
+                //    var resultModel = new AllMarketsDTO()
+                //    {
+                //        Id = market.Id,
+                //        Name = market.Name,
+                //        LastUpdated = market.LastUpdated,
+                //        SpotsInMarketCount = countDict[market.Id]
+                //    };
 
-                    resultsModel.Add(resultModel);                  
-                }
+                //    resultsModel.Add(resultModel);                  
+                //}
 
                 return Ok(resultsModel);
             }
@@ -116,44 +119,7 @@ namespace AOP.WebAPI.Controllers
                 {
                     _logger.LogInformation("Returned market with details for name: {0}", name);
 
-                    var marketResult = new MarketDetailsDTO()
-                    {
-                        Id = market.Id,
-                        Name = market.Name,
-                        LastUpdated = market.LastUpdated,
-                        Headquarters = market.Headquarters.Select(hq =>
-                            new HeadquartersDTO()
-                            {
-                                Id = hq.Id,
-                                Name = hq.Name,
-                                LastUpdated = hq.LastUpdated,
-                                DistributionServers = hq.DistributionServers.Select(ds =>
-                                new DistributionServerDTO()
-                                {
-                                    Id = ds.Id,
-                                    ServerIdentity = ds.ServerIdentity,
-                                    LastUpdated = ds.LastUpdated,
-                                    ServerFolder = ds.ServerFolder,
-                                    SpotsLogFileName = ds.SpotsLogFileName,
-                                    SpotsLogLastWriteTime = ds.SpotsLogLastWriteTime,
-                                    LastSuccessfulDatabaseJob = ds.LastSuccessfulDatabaseJob,
-                                    Spots = ds.DistributionServerSpots
-                                        .Select(dss =>
-                                        new DistributionServerSpotDTO()
-                                        {
-                                            Id = dss.Id,
-                                            FirstAirDate = dss.FirstAirDate,
-                                            Spot = new SpotDTO()
-                                            {
-                                                Id = dss.Spot.Id,
-                                                SpotIdentifier = dss.Spot.SpotIdentifier,
-                                                Name = dss.Spot.Name,
-                                            }
-                                        })
-                                })
-                            })
-                    };
-
+                    var marketResult = _mapper.Map<MarketDTO>(market);
                     return Ok(marketResult);
                 }
             }

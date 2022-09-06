@@ -1,6 +1,5 @@
 ﻿namespace AOP.WebAPI.Core.Repositories
 {
-    using AOP.WebAPI.Core.Contracts;
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Repositories.Base;
     using Microsoft.EntityFrameworkCore;
@@ -11,6 +10,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using AOP.WebAPI.Core.Data.Entities.Models;
+    using AOP.WebAPI.Core.Interfaces;
 
     public class MarketRepository : RepositoryBase<Market>, IMarketRepository
     {

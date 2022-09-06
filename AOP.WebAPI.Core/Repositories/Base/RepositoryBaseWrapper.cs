@@ -1,6 +1,5 @@
 ﻿namespace AOP.WebAPI.Core.Repositories.Base
 {
-    using AOP.WebAPI.Core.Contracts;
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Interfaces;
 

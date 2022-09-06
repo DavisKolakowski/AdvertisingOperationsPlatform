@@ -4,6 +4,11 @@ namespace AOP.WebAPI.Core.Data.Entities.Models
 {
     public class DistributionServer
     {
+        public DistributionServer()
+        {
+            DistributionServerSpots = new List<DistributionServerSpot>();
+        }
+
         public int Id { get; set; }
 
         public string ServerIdentity { get; set; }
@@ -12,7 +17,7 @@ namespace AOP.WebAPI.Core.Data.Entities.Models
 
         public int? HeadquartersId { get; set; }
 
-        public Headquarters Headquarters { get; set; }
+        public virtual Headquarters Headquarters { get; set; }
 
         public DateTime? LastUpdated { get; set; }
 
@@ -22,6 +27,6 @@ namespace AOP.WebAPI.Core.Data.Entities.Models
 
         public DateTime? SpotsLogLastWriteTime { get; set; }
 
-        public List<DistributionServerSpot> DistributionServerSpots { get; set; } = new List<DistributionServerSpot>();
+        public virtual IList<DistributionServerSpot> DistributionServerSpots { get; set; }
     }
 }

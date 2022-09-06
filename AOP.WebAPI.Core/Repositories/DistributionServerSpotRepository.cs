@@ -1,6 +1,5 @@
 ﻿namespace AOP.WebAPI.Core.Repositories
 {
-    using AOP.WebAPI.Core.Contracts;
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Repositories.Base;
     using Microsoft.EntityFrameworkCore;
@@ -12,6 +11,7 @@
     using System.Threading.Tasks;
     using AOP.WebAPI.Core.Data.Entities.Models;
     using System.Security.Principal;
+    using AOP.WebAPI.Core.Interfaces;
 
     public class DistributionServerSpotRepository : RepositoryBase<DistributionServerSpot>, IDistributionServerSpotRepository
     {
