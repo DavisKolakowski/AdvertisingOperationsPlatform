@@ -26,19 +26,20 @@
             CreateMap<Spot, SpotDTO>();
 
 
-
-            CreateMap<Market, AllMarketsDTO>();
+            CreateMap<Market, AllMarketsDTO>()
+                .ForMember(dto => dto.SpotsInMarketCount, options =>
+                    options.MapFrom(m => m.Headquarters
+                        .SelectMany(hq => hq.DistributionServers)
+                        .SelectMany(ds => ds.DistributionServerSpots)
+                        .Select(dss => dss.Spot)
+                        .DistinctBy(s => s.DistributionServerSpots.Select(dss => dss.FirstAirDate))
+                        .Count()));
 
             CreateMap<Market, MarketByNameDTO>();
 
-            CreateMap<Market, MarketWithDetailsDTO>()
-                .ForMember(dto => dto.Market, options => 
-                    options.MapFrom(m => m.Headquarters));
+            CreateMap<Market, MarketWithDetailsDTO>();
 
-            CreateMap<Headquarters, HeadquartersWithDetailsDTO>();
-
-
-            CreateMap<DistributionServer, DistributionServerDetailsDTO>();
+            CreateMap<Headquarters, HeadquartersForMarketWithDetailsDTO>();
         }
     }
 }

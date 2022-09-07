@@ -1,5 +1,7 @@
 ﻿namespace AOP.WebAPI.Core.Data.Entities.DataTransferObjects
 {
+    using AOP.WebAPI.Core.Data.Entities.Models;
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -8,10 +10,15 @@
 
     public class DistributionServerSpotDTO
     {
-        public int Id { get; set; }
+        public DistributionServerSpotDTO()
+        {
+            this.Spot = new SpotDTO();
+        }
+
+        public int Id { get; set; }        
 
         public DateTime? FirstAirDate { get; set; }
 
-        public SpotDTO Spot { get; set; }
+        public virtual SpotDTO Spot { get; set; }
     }
 }

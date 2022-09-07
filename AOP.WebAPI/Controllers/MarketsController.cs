@@ -33,35 +33,20 @@ namespace AOP.WebAPI.Controllers
             {
                 var markets = await this._marketRepository.GetAllMarketsAsync();               
 
-                var resultsModel = new List<AllMarketsDTO>();
+                var marketsResult = new List<AllMarketsDTO>();
 
                 var countDict = new Dictionary<int, int>();
 
-                //foreach (var market in markets)
-                //{
-                //    var marketDetails = await this._marketRepository.GetMarketWithDetailsAsync(market.Name);
+                foreach (var market in markets)
+                {
+                    var marketDetails = await this._marketRepository.GetMarketWithDetailsAsync(market.Name);
 
-                //    var marketSpots = marketDetails.Headquarters
-                //        .SelectMany(hq => hq.DistributionServers)
-                //        .SelectMany(ds => ds.DistributionServerSpots)
-                //        .Select(dss => dss.Spot)
-                //        .Distinct()
-                //        .ToList();
+                    var resultModel = _mapper.Map<AllMarketsDTO>(marketDetails);
 
-                //    countDict.Add(market.Id, marketSpots.Count);
+                    marketsResult.Add(resultModel);
+                }
 
-                //    var resultModel = new AllMarketsDTO()
-                //    {
-                //        Id = market.Id,
-                //        Name = market.Name,
-                //        LastUpdated = market.LastUpdated,
-                //        SpotsInMarketCount = countDict[market.Id]
-                //    };
-
-                //    resultsModel.Add(resultModel);                  
-                //}
-
-                return Ok(resultsModel);
+                return Ok(marketsResult);
             }
             catch (Exception ex)
             {
@@ -86,12 +71,7 @@ namespace AOP.WebAPI.Controllers
                 {
                     this._logger.LogInformation("Returned market with the name: {0}", name);
 
-                    var marketResult = new MarketByNameDTO()
-                    {
-                        Id = market.Id,
-                        Name = market.Name,
-                        LastUpdated = market.LastUpdated,
-                    };
+                    var marketResult = _mapper.Map<MarketByNameDTO>(market);
 
                     return Ok(marketResult);
                 }
@@ -119,7 +99,7 @@ namespace AOP.WebAPI.Controllers
                 {
                     _logger.LogInformation("Returned market with details for name: {0}", name);
 
-                    var marketResult = _mapper.Map<MarketDTO>(market);
+                    var marketResult = _mapper.Map<MarketWithDetailsDTO>(market);
                     return Ok(marketResult);
                 }
             }

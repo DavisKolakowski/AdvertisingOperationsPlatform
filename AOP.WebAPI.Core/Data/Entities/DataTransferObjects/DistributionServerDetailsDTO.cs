@@ -8,11 +8,21 @@
 
     public class DistributionServerDetailsDTO
     {
+        public DistributionServerDetailsDTO()
+        {
+            this.Headquarters = new HeadquartersDTO();
+            this.DistributionServerSpots = new List<DistributionServerSpotDTO>();
+        }
+
         public int Id { get; set; }
 
-        public string ServerIdentity { get; set; }
+        public string ServerIdentity { get; set; } = string.Empty;
 
-        public string ServerFolder { get; set; }
+        public string ServerFolder { get; set; } = string.Empty;
+
+        public int? HeadquartersId { get; set; }
+
+        public virtual HeadquartersDTO Headquarters { get; set; }
 
         public DateTime? LastUpdated { get; set; }
 
@@ -22,8 +32,6 @@
 
         public DateTime? SpotsLogLastWriteTime { get; set; }
 
-        public DistributionServerHeadquartersDTO Headquarters { get; set; }
-
-        public IList<DistributionServerSpotDTO> Spots { get; set; }
+        public virtual IList<DistributionServerSpotDTO> DistributionServerSpots { get; set; }
     }
 }

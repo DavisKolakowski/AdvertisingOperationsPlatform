@@ -7,8 +7,20 @@
     using System.Threading.Tasks;
     public class HeadquartersWithDetailsDTO
     {
-        public HeadquartersDTO HeadquartersDTO { get; set; }
+        public HeadquartersWithDetailsDTO()
+        {
+            this.Markets = new HashSet<MarketDTO>();
+            this.DistributionServers = new HashSet<DistributionServerDTO>();
+        }
 
-        public IList<MarketDTO> Markets { get; set; }
+        public int Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+
+        public DateTime? LastUpdated { get; set; }
+
+        public virtual ICollection<MarketDTO> Markets { get; set; }
+
+        public virtual ICollection<DistributionServerDTO> DistributionServers { get; set; }
     }
 }

@@ -5,11 +5,12 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    public class MarketWithDetailsDTO
+
+    public class HeadquartersForMarketWithDetailsDTO
     {
-        public MarketWithDetailsDTO()
+        public HeadquartersForMarketWithDetailsDTO()
         {
-            this.Headquarters = new HashSet<HeadquartersForMarketWithDetailsDTO>();
+            this.DistributionServers = new HashSet<DistributionServerDTO>();
         }
 
         public int Id { get; set; }
@@ -18,6 +19,6 @@
 
         public DateTime? LastUpdated { get; set; }
 
-        public virtual ICollection<HeadquartersForMarketWithDetailsDTO> Headquarters { get; set; }
+        public virtual ICollection<DistributionServerDTO> DistributionServers { get; set; }
     }
 }
