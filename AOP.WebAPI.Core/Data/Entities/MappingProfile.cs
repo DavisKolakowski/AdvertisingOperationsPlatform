@@ -1,8 +1,7 @@
-﻿namespace AOP.WebAPI.Core.Data.Entities
+﻿namespace AOP.WebAPI
 {
     using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
     using AOP.WebAPI.Core.Data.Entities.Models;
-
     using AutoMapper;
 
     using System;
@@ -15,31 +14,29 @@
     {
         public MappingProfile()
         {
-            CreateMap<Market, MarketDTO>();
+            CreateMap<Market, MarketDTO>()
+                .ForMember(obj => obj.HeadquartersIds, options =>
+                    options.MapFrom(m => m.Headquarters.Select(hq => hq.Id).ToArray()));
 
-            CreateMap<Headquarters, HeadquartersDTO>();
+            CreateMap<Headquarters, HeadquartersDTO>()
+                .ForMember(obj => obj.MarketIds, options =>
+                    options.MapFrom(hq => hq.Markets.Select(m => m.Id).ToArray()))
+                .ForMember(obj => obj.DistributionServers, options =>
+                    options.MapFrom(hq => hq.DistributionServers));
 
-            CreateMap<DistributionServer, DistributionServerDTO>();
+            CreateMap<DistributionServer, DistributionServerDTO>()
+                .ForMember(obj => obj.HeadquartersId, options =>
+                    options.MapFrom(ds => ds.Headquarters.Id));
 
-            CreateMap<DistributionServerSpot, DistributionServerSpotDTO>();
+            CreateMap<DistributionServerSpot, DistributionServerSpotDTO>()
+                .ForMember(obj => obj.DistributionServerId, options =>
+                    options.MapFrom(dss => dss.DistributionServer.Id))
+                .ForMember(obj => obj.SpotId, options =>
+                    options.MapFrom(dss => dss.Spot.Id));
 
-            CreateMap<Spot, SpotDTO>();
-
-
-            CreateMap<Market, AllMarketsDTO>()
-                .ForMember(dto => dto.SpotsInMarketCount, options =>
-                    options.MapFrom(m => m.Headquarters
-                        .SelectMany(hq => hq.DistributionServers)
-                        .SelectMany(ds => ds.DistributionServerSpots)
-                        .Select(dss => dss.Spot)
-                        .DistinctBy(s => s.DistributionServerSpots.Select(dss => dss.FirstAirDate))
-                        .Count()));
-
-            CreateMap<Market, MarketByNameDTO>();
-
-            CreateMap<Market, MarketWithDetailsDTO>();
-
-            CreateMap<Headquarters, HeadquartersForMarketWithDetailsDTO>();
+            CreateMap<Spot, SpotDTO>()
+                .ForMember(obj => obj.DistributionServerSpots, options =>
+                    options.MapFrom(s => s.DistributionServerSpots));
         }
     }
 }

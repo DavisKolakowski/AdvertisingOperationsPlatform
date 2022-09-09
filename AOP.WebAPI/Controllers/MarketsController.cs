@@ -6,8 +6,9 @@ namespace AOP.WebAPI.Controllers
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Interfaces;
     using AOP.WebAPI.Core.Data.Entities.Models;
-    using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
+    using AOP.WebAPI.DataTransferObjects;
     using AutoMapper;
+    using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
 
     [ApiController]
     [Route("[controller]")]
@@ -99,7 +100,7 @@ namespace AOP.WebAPI.Controllers
                 {
                     _logger.LogInformation("Returned market with details for name: {0}", name);
 
-                    var marketResult = _mapper.Map<MarketWithDetailsDTO>(market);
+                    var marketResult = _mapper.Map<MarketDTO>(market);
                     return Ok(marketResult);
                 }
             }

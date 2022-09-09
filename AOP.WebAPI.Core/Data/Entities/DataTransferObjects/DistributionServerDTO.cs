@@ -1,7 +1,5 @@
 ﻿namespace AOP.WebAPI.Core.Data.Entities.DataTransferObjects
 {
-    using AOP.WebAPI.Core.Data.Entities.Models;
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,16 +8,11 @@
 
     public class DistributionServerDTO
     {
-        public DistributionServerDTO()
-        {
-            this.DistributionServerSpots = new List<DistributionServerSpotDTO>();
-        }
-
         public int Id { get; set; }
 
-        public string ServerIdentity { get; set; } = string.Empty;
+        public string? ServerIdentity { get; set; }
 
-        public string ServerFolder { get; set; } = string.Empty;
+        public string? ServerFolder { get; set; }
 
         public int? HeadquartersId { get; set; }
 
@@ -27,10 +20,8 @@
 
         public DateTime? LastSuccessfulDatabaseJob { get; set; }
 
-        public string SpotsLogFileName { get; set; } = string.Empty;
+        public string? SpotsLogFileName { get; set; }
 
         public DateTime? SpotsLogLastWriteTime { get; set; }
-
-        public virtual IList<DistributionServerSpotDTO> DistributionServerSpots { get; set; }
     }
 }

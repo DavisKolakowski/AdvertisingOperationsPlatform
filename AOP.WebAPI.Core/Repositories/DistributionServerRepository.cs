@@ -9,8 +9,8 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using AOP.WebAPI.Core.Data.Entities.Models;
     using AOP.WebAPI.Core.Interfaces;
+    using AOP.WebAPI.Core.Data.Entities.Models;
 
     public class DistributionServerRepository : RepositoryBase<DistributionServer>, IDistributionServerRepository
     {

@@ -6,7 +6,7 @@ namespace AOP.WebAPI.Controllers
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Interfaces;
     using AOP.WebAPI.Core.Data.Entities.Models;
-    using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
+    using AOP.WebAPI.DataTransferObjects;
     using AutoMapper;
 
     [ApiController]

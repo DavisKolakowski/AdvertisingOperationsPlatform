@@ -5,19 +5,15 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
     public class MarketDTO
     {
-        public MarketDTO()
-        {
-            this.Headquarters = new HashSet<HeadquartersDTO>();
-        }
-
         public int Id { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
 
         public DateTime? LastUpdated { get; set; }
 
-        public virtual ICollection<HeadquartersDTO> Headquarters { get; set; }
+        public int[]? HeadquartersIds { get; set; }
     }
 }

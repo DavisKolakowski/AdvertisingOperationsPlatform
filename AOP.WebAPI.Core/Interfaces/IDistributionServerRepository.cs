@@ -1,7 +1,6 @@
 ﻿namespace AOP.WebAPI.Core.Interfaces
 {
     using AOP.WebAPI.Core.Data.Entities.Models;
-
     using System;
     using System.Collections.Generic;
     using System.Linq;

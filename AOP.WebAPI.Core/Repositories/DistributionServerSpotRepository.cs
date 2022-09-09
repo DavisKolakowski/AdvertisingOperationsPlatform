@@ -9,9 +9,9 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using AOP.WebAPI.Core.Data.Entities.Models;
     using System.Security.Principal;
     using AOP.WebAPI.Core.Interfaces;
+    using AOP.WebAPI.Core.Data.Entities.Models;
 
     public class DistributionServerSpotRepository : RepositoryBase<DistributionServerSpot>, IDistributionServerSpotRepository
     {

@@ -8,20 +8,14 @@
 
     public class HeadquartersDTO
     {
-        public HeadquartersDTO()
-        {
-            this.Markets = new HashSet<MarketDTO>();
-            this.DistributionServers = new HashSet<DistributionServerDTO>();
-        }
-
         public int Id { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
 
         public DateTime? LastUpdated { get; set; }
 
-        public virtual ICollection<MarketDTO> Markets { get; set; }
+        public int[]? MarketIds { get; set; }
 
-        public virtual ICollection<DistributionServerDTO> DistributionServers { get; set; }
+        public DistributionServerDTO[]? DistributionServers { get; set; }
     }
 }

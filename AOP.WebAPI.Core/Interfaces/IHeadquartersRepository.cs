@@ -1,6 +1,7 @@
 ﻿namespace AOP.WebAPI.Core.Interfaces
 {
     using AOP.WebAPI.Core.Data.Entities.Models;
+
     public interface IHeadquartersRepository : IRepositoryBase<Headquarters>
     {
         Task<IEnumerable<Headquarters>> GetAllHeadquartersAsync();

@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using AOP;
+
 namespace AOP.WebAPI.Core.Data.Entities.Models
 {
     public class Market
