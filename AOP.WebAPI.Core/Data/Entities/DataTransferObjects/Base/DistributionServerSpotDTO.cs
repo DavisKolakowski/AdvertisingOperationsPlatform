@@ -1,4 +1,4 @@
-﻿namespace AOP.WebAPI.Core.Data.Entities.DataTransferObjects
+﻿namespace AOP.WebAPI.Core.Data.Entities.DataTransferObjects.Base
 {
     using System;
     using System.Collections.Generic;

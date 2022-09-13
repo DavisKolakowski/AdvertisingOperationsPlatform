@@ -8,7 +8,7 @@ namespace AOP.WebAPI.Controllers
     using AOP.WebAPI.Core.Data.Entities.Models;
     using AOP.WebAPI.DataTransferObjects;
     using AutoMapper;
-    using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
+    using AOP.WebAPI.Core.Data.Entities.DataTransferObjects.Base;
 
     [ApiController]
     [Route("[controller]")]
@@ -40,7 +40,7 @@ namespace AOP.WebAPI.Controllers
 
                 foreach (var market in markets)
                 {
-                    var marketDetails = await this._marketRepository.GetMarketWithDetailsAsync(market.Name);
+                    var marketDetails = await this._marketRepository.GetMarketByNameWithSpotsAsync(market.Name);
 
                     var resultModel = _mapper.Map<AllMarketsDTO>(marketDetails);
 
@@ -56,12 +56,39 @@ namespace AOP.WebAPI.Controllers
             }
         }
 
-        [HttpGet("{name}", Name = "MarketByName")]
-        public async Task<IActionResult> GetMarketByName(string name)
+        [HttpGet("{name}/details")]
+        public async Task<IActionResult> GetMarketWithSpotDetails(string name)
         {
             try
             {
-                var market = await this._marketRepository.GetMarketByNameAsync(name);               
+                var market = await this._marketRepository.GetMarketByNameWithSpotsAsync(name);
+
+                if (market == null)
+                {
+                    _logger.LogError("Market with the name: {0}, could not be found in the database", name);
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogInformation("Returned market with details for name: {0}", name);
+
+                    var marketResult = _mapper.Map<MarketDTO>(market);
+                    return Ok(marketResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Something went wrong inside GetMarketWithSpotDetails action: {0}", ex.Message);
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet("{name}", Name = "MarketByNameWithHeadquarters")]
+        public async Task<IActionResult> GetMarketByNameWithHeadquarters(string name)
+        {
+            try
+            {
+                var market = await this._marketRepository.GetMarketByNameWithHeadquartersAsync(name);               
 
                 if (market == null)
                 {
@@ -79,34 +106,7 @@ namespace AOP.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                this._logger.LogError("Something went wrong inside GetMarketByName action: {0}", ex.Message);
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
-        [HttpGet("{name}/details")]
-        public async Task<IActionResult> GetMarketWithDetails(string name)
-        {
-            try
-            {
-                var market = await this._marketRepository.GetMarketWithDetailsAsync(name);
-
-                if (market == null)
-                {
-                    _logger.LogError("Market with the name: {0}, could not be found in the database", name);
-                    return NotFound();
-                }
-                else
-                {
-                    _logger.LogInformation("Returned market with details for name: {0}", name);
-
-                    var marketResult = _mapper.Map<MarketDTO>(market);
-                    return Ok(marketResult);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Something went wrong inside GetMarketWithDetails action: {0}", ex.Message);
+                this._logger.LogError("Something went wrong inside GetMarketByNameWithHeadquarters action: {0}", ex.Message);
                 return StatusCode(500, "Internal server error");
             }
         }

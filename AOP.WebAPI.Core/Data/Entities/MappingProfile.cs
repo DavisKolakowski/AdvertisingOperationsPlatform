@@ -1,6 +1,7 @@
 ﻿namespace AOP.WebAPI
 {
     using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
+    using AOP.WebAPI.Core.Data.Entities.DataTransferObjects.Base;
     using AOP.WebAPI.Core.Data.Entities.Models;
     using AutoMapper;
 

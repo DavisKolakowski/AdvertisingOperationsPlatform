@@ -27,13 +27,7 @@
                .ToListAsync();
         }
 
-        public async Task<Market> GetMarketByNameAsync(string marketName)
-        {
-            return await FindBy(market => market.Name == marketName)
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<Market> GetMarketWithDetailsAsync(string marketName)
+        public async Task<Market> GetMarketByNameWithSpotsAsync(string marketName)
         {
             return await FindBy(market => market.Name == marketName)
                 .Include(m => m.Headquarters)
@@ -42,6 +36,13 @@
                             .ThenInclude(dss => dss.Spot)
                                 .ThenInclude(spot => spot.DistributionServerSpots)
                                     .ThenInclude(dss => dss.DistributionServer)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Market> GetMarketByNameWithHeadquartersAsync(string marketName)
+        {
+            return await FindBy(market => market.Name == marketName)
+                .Include(m => m.Headquarters)
                 .FirstOrDefaultAsync();
         }
 

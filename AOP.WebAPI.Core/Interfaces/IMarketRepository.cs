@@ -6,9 +6,9 @@
     {
         Task<IEnumerable<Market>> GetAllMarketsAsync();
 
-        Task<Market> GetMarketByNameAsync(string marketName);
+        Task<Market> GetMarketByNameWithSpotsAsync(string marketName);
 
-        Task<Market> GetMarketWithDetailsAsync(string marketName);
+        Task<Market> GetMarketByNameWithHeadquartersAsync(string marketName);
 
         void CreateMarket(Market market);
 
