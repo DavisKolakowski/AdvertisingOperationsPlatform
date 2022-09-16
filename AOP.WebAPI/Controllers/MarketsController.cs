@@ -5,10 +5,10 @@ namespace AOP.WebAPI.Controllers
     using Microsoft.EntityFrameworkCore.Design;
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Interfaces;
-    using AOP.WebAPI.Core.Data.Entities.Models;
-    using AOP.WebAPI.DataTransferObjects;
+    using AOP.WebAPI.Core.Data.Entities;
     using AutoMapper;
-    using AOP.WebAPI.Core.Data.Entities.DataTransferObjects.Base;
+    using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
+    using AOP.WebAPI.Models;
 
     [ApiController]
     [Route("[controller]")]
@@ -16,14 +16,14 @@ namespace AOP.WebAPI.Controllers
     {
         private ILogger<MarketsController> _logger;
 
-        private IMarketRepository _marketRepository;
+        private IRepositoryBaseWrapper _repository;
 
         private IMapper _mapper;
 
-        public MarketsController(ILogger<MarketsController> logger, IMarketRepository marketRepository, IMapper mapper)
+        public MarketsController(ILogger<MarketsController> logger, IRepositoryBaseWrapper repository, IMapper mapper)
         {
             this._logger = logger;
-            this._marketRepository = marketRepository;
+            this._repository = repository;
             this._mapper = mapper;
         }
 
@@ -32,22 +32,26 @@ namespace AOP.WebAPI.Controllers
         {
             try
             {
-                var markets = await this._marketRepository.GetAllMarketsAsync();               
+                var markets = await this._repository.Market.GetAllMarketsAsync();               
 
-                var marketsResult = new List<AllMarketsDTO>();
+                var result = new List<MarketWithSpotCountResponse>();
 
                 var countDict = new Dictionary<int, int>();
 
                 foreach (var market in markets)
                 {
-                    var marketDetails = await this._marketRepository.GetMarketByNameWithSpotsAsync(market.Name);
+                    var marketSpots = await this._repository.Market.GetSpotsByMarketAsync(market);
 
-                    var resultModel = _mapper.Map<AllMarketsDTO>(marketDetails);
+                    var resultModel = new MarketWithSpotCountResponse()
+                    {
+                        Market = _mapper.Map<MarketDTO>(market),
+                        MarketSpotCount = marketSpots.Count(),
+                    };
 
-                    marketsResult.Add(resultModel);
+                    result.Add(resultModel);
                 }
 
-                return Ok(marketsResult);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -61,7 +65,7 @@ namespace AOP.WebAPI.Controllers
         {
             try
             {
-                var market = await this._marketRepository.GetMarketByNameWithSpotsAsync(name);
+                var market = await this._repository.Market.GetMarketByNameAsync(name);
 
                 if (market == null)
                 {
@@ -72,8 +76,19 @@ namespace AOP.WebAPI.Controllers
                 {
                     _logger.LogInformation("Returned market with details for name: {0}", name);
 
+                    var marketSpots = await this._repository.Market.GetSpotsByMarketAsync(market);
+
                     var marketResult = _mapper.Map<MarketDTO>(market);
-                    return Ok(marketResult);
+
+                    var marketSpotDetailsResult = _mapper.Map<List<SpotDTO>>(marketSpots);
+
+                    var response = new MarketWithSpotsResponse()
+                    {
+                        Market = marketResult,
+                        SpotsInMarket = marketSpotDetailsResult,
+                    };
+
+                    return Ok(response);
                 }
             }
             catch (Exception ex)
@@ -88,7 +103,7 @@ namespace AOP.WebAPI.Controllers
         {
             try
             {
-                var market = await this._marketRepository.GetMarketByNameWithHeadquartersAsync(name);               
+                var market = await this._repository.Market.GetMarketByNameAsync(name);                             
 
                 if (market == null)
                 {
@@ -97,11 +112,21 @@ namespace AOP.WebAPI.Controllers
                 }
                 else
                 {
+                    var marketDetails = await this._repository.Market.GetMarketWithDetailsAsync(market.Id);
+
                     this._logger.LogInformation("Returned market with the name: {0}", name);
 
-                    var marketResult = _mapper.Map<MarketByNameDTO>(market);
+                    var marketResult = _mapper.Map<MarketDTO>(marketDetails);
 
-                    return Ok(marketResult);
+                    var headquartersResult = _mapper.Map<List<HeadquartersDTO>>(marketDetails.Headquarters);
+
+                    var response = new MarketWithHeadquartersResponse()
+                    {
+                        Market = marketResult,
+                        Headquarters = headquartersResult,
+                    };
+
+                    return Ok(response);
                 }
             }
             catch (Exception ex)

@@ -5,9 +5,9 @@ namespace AOP.WebAPI.Controllers
     using Microsoft.EntityFrameworkCore.Design;
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Interfaces;
-    using AOP.WebAPI.Core.Data.Entities.Models;
-    using AOP.WebAPI.DataTransferObjects;
+    using AOP.WebAPI.Core.Data.Entities;
     using AutoMapper;
+    using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
 
     [ApiController]
     [Route("[controller]")]
@@ -71,7 +71,7 @@ namespace AOP.WebAPI.Controllers
         {
             try
             {
-                var headquarters = await this._headquartersRepository.GetHeadquartersWithDetailsAsync(name);
+                var headquarters = await this._headquartersRepository.GetHeadquartersByNameAsync(name);
 
                 if (headquarters == null)
                 {
@@ -80,9 +80,11 @@ namespace AOP.WebAPI.Controllers
                 }
                 else
                 {
+                    var headquartersDetails = await this._headquartersRepository.GetHeadquartersWithDetailsAsync(headquarters.Id);
+
                     _logger.LogInformation("Returned headquarters with details for name: {0}", name);
 
-                    var headquartersResult = _mapper.Map<HeadquartersWithDetailsDTO>(headquarters);
+                    var headquartersResult = _mapper.Map<HeadquartersDTO>(headquarters);
                     return Ok(headquartersResult);
                 }
             }

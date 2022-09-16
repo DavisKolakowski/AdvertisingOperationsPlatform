@@ -27,23 +27,40 @@
                .ToListAsync();
         }
 
-        public async Task<Market> GetMarketByNameWithSpotsAsync(string marketName)
+        public async Task<Market> GetMarketByNameAsync(string marketName)
         {
             return await FindBy(market => market.Name == marketName)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Market> GetMarketByIdAsync(int marketId)
+        {
+            return await FindBy(market => market.Id == marketId)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Market> GetMarketWithDetailsAsync(int marketId)
+        {
+            return await FindBy(market => market.Id == marketId)
+                    .Include(m => m.Headquarters)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Spot>> GetSpotsByMarketAsync(Market market)
+        {
+            return await FindBy(m => m == market)
                 .Include(m => m.Headquarters)
                     .ThenInclude(hq => hq.DistributionServers)
                         .ThenInclude(ds => ds.DistributionServerSpots)
                             .ThenInclude(dss => dss.Spot)
                                 .ThenInclude(spot => spot.DistributionServerSpots)
                                     .ThenInclude(dss => dss.DistributionServer)
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<Market> GetMarketByNameWithHeadquartersAsync(string marketName)
-        {
-            return await FindBy(market => market.Name == marketName)
-                .Include(m => m.Headquarters)
-                .FirstOrDefaultAsync();
+                        .SelectMany(m => m.Headquarters)
+                        .SelectMany(hq => hq.DistributionServers)
+                        .SelectMany(ds => ds.DistributionServerSpots)
+                        .Select(dss => dss.Spot)
+                        .Distinct()
+                .ToListAsync();
         }
 
         public void CreateMarket(Market market)

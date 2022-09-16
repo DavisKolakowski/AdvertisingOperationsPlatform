@@ -5,9 +5,9 @@ namespace AOP.WebAPI.Controllers
     using Microsoft.EntityFrameworkCore.Design;
     using AOP.WebAPI.Core.Data;
     using AOP.WebAPI.Core.Interfaces;
-    using AOP.WebAPI.Core.Data.Entities.Models;
-    using AOP.WebAPI.DataTransferObjects;
+    using AOP.WebAPI.Core.Data.Entities;
     using AutoMapper;
+    using AOP.WebAPI.Core.Data.Entities.DataTransferObjects;
 
     [ApiController]
     [Route("[controller]")]
@@ -71,7 +71,7 @@ namespace AOP.WebAPI.Controllers
         {
             try
             {
-                var distributionServer = await this._distributionServerRepository.GetDistributionServerWithDetailsAsync(serverIdentity);
+                var distributionServer = await this._distributionServerRepository.GetDistributionServerByServerIdentityAsync(serverIdentity);
 
                 if (distributionServer == null)
                 {
@@ -80,9 +80,11 @@ namespace AOP.WebAPI.Controllers
                 }
                 else
                 {
+                    var distributionServerDetails = await this._distributionServerRepository.GetDistributionServerWithDetailsAsync(distributionServer.Id);
+
                     _logger.LogInformation("Returned distribution server with details for identity: {0}", serverIdentity);
 
-                    var distributionServerResult = _mapper.Map<DistributionServerDetailsDTO>(distributionServer);
+                    var distributionServerResult = _mapper.Map<DistributionServerDTO>(distributionServerDetails);
                     return Ok(distributionServerResult);
                 }
             }

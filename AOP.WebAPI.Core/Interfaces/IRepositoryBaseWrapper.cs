@@ -4,6 +4,10 @@
     {
         IMarketRepository Market { get; }
 
+        IHeadquartersRepository Headquarters { get; }
+
+        IDistributionServerRepository DistributionServer { get; }
+
         Task SaveAsync();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace AOP.WebAPI.Core.Data.Entities.DataTransferObjects.Base
+﻿namespace AOP.WebAPI.Core.Data.Entities.DataTransferObjects
 {
     using System;
     using System.Collections.Generic;
@@ -14,6 +14,6 @@
 
         public string? Name { get; set; }
 
-        public DistributionServerSpotDTO[]? DistributionServerSpots { get; set; }
+        public DateTime? FirstAirDate { get; set; }
     }
 }

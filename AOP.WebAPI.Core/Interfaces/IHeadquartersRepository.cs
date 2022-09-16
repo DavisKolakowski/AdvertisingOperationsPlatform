@@ -8,7 +8,11 @@
 
         Task<Headquarters> GetHeadquartersByNameAsync(string headquartersName);
 
-        Task<Headquarters> GetHeadquartersWithDetailsAsync(string headquartersName);
+        Task<Headquarters> GetHeadquartersByIdAsync(int headquartersId);
+
+        Task<Headquarters> GetHeadquartersWithDetailsAsync(int headquartersId);
+
+        Task<IEnumerable<Spot>> GetSpotsByHeadquartersAsync(Headquarters headquarters);
 
         void CreateHeadquarters(Headquarters headquarters);
 

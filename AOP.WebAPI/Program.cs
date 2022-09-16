@@ -4,10 +4,10 @@ namespace AOP.WebAPI
     using Microsoft.EntityFrameworkCore.Design;
     using AOP.WebAPI.Core.Interfaces;
     using AOP.WebAPI.Core.Data;
-    using AOP.WebAPI.Core.Data.Entities.Models;
     using AOP.WebAPI.Core.Repositories;
     using AutoMapper;
     using AOP.WebAPI.Core.Data.Entities;
+    using AOP.WebAPI.Core.Repositories.Base;
 
     public class Program
     {
@@ -25,9 +25,7 @@ namespace AOP.WebAPI
 
             builder.Services.AddScoped<DbContext, AOPDatabaseContext>();
 
-            builder.Services.AddScoped<IMarketRepository, MarketRepository>();
-            builder.Services.AddScoped<IHeadquartersRepository, HeadquartersRepository>();
-            builder.Services.AddScoped<IDistributionServerRepository, DistributionServerRepository>();
+            builder.Services.AddScoped<IRepositoryBaseWrapper, RepositoryBaseWrapper>();
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 

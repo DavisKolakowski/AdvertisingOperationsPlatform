@@ -33,16 +33,33 @@
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Headquarters> GetHeadquartersWithDetailsAsync(string headquartersName)
+        public async Task<Headquarters> GetHeadquartersByIdAsync(int headquartersId)
         {
-            return await FindBy(headquarters => headquarters.Name == headquartersName)
-                .Include(hq => hq.Markets)
-                .Include(hq => hq.DistributionServers)
-                    .ThenInclude(ds => ds.DistributionServerSpots)
-                        .ThenInclude(dss => dss.Spot)
-                            .ThenInclude(spot => spot.DistributionServerSpots)
-                                .ThenInclude(dss => dss.DistributionServer)
+            return await FindBy(headquarters => headquarters.Id == headquartersId)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<Headquarters> GetHeadquartersWithDetailsAsync(int headquartersId)
+        {
+            return await FindBy(headquarters => headquarters.Id == headquartersId)
+                    .Include(hq => hq.Markets)
+                    .Include(hq => hq.DistributionServers)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Spot>> GetSpotsByHeadquartersAsync(Headquarters headquarters)
+        {
+            return await FindBy(hq => hq == headquarters)
+                    .Include(hq => hq.DistributionServers)
+                        .ThenInclude(ds => ds.DistributionServerSpots)
+                            .ThenInclude(dss => dss.Spot)
+                                .ThenInclude(spot => spot.DistributionServerSpots)
+                                    .ThenInclude(dss => dss.DistributionServer)
+                        .SelectMany(hq => hq.DistributionServers)
+                        .SelectMany(ds => ds.DistributionServerSpots)
+                        .Select(dss => dss.Spot)
+                        .Distinct()
+                .ToListAsync();
         }
 
         public void CreateHeadquarters(Headquarters headquarters)

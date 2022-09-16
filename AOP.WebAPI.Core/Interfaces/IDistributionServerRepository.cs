@@ -13,7 +13,11 @@
 
         Task<DistributionServer> GetDistributionServerByServerIdentityAsync(string serverIdentity);
 
-        Task<DistributionServer> GetDistributionServerWithDetailsAsync(string serverIdentity);
+        Task<DistributionServer> GetDistributionServerByServerIdAsync(int serverId);
+
+        Task<DistributionServer> GetDistributionServerWithDetailsAsync(int serverId);
+
+        Task<IEnumerable<Spot>> GetSpotsByDistributionServerAsync(DistributionServer distributionServer);
 
         void CreateDistributionServer(DistributionServer headquarters);
 
